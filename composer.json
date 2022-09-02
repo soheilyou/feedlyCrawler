@@ -34,6 +34,15 @@
         }
     },
     "scripts": {
+        "fix-cs": [
+            "prettier app/**/* --write",
+            "prettier config/**/* --write",
+            "prettier database/**/* --write",
+            "prettier docs/**/* --write",
+            "prettier routes/**/* --write",
+            "prettier resources/**/* --write",
+            "prettier tests/**/* --write"
+        ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"

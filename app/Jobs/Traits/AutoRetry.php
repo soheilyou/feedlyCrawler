@@ -18,7 +18,9 @@ trait AutoRetry
      */
     public function middleware(): array
     {
-        return [new ThrottlesExceptions($this->maxAttempts, $this->decayMinutes)];
+        return [
+            new ThrottlesExceptions($this->maxAttempts, $this->decayMinutes),
+        ];
     }
 
     /**
