@@ -4,7 +4,7 @@ namespace App\Jobs;
 
 use App\Classes\Crawler\FeedCrawler;
 use App\Classes\Organize\NewItemsProcess;
-use App\Jobs\Traits\FeedlyDispatcher;
+use App\Jobs\Feedly\AddNewItems;
 use App\Jobs\Traits\ProcessNewItemsDispatcher;
 use App\Models\Feed;
 use App\Repositories\Feed\FeedRepositoryInterface;
@@ -43,6 +43,7 @@ class ProcessNewItems implements ShouldQueue
      * Execute the job.
      *
      * @return void
+     * @throws Exception
      */
     public function handle()
     {
@@ -52,9 +53,11 @@ class ProcessNewItems implements ShouldQueue
         $this->feedCrawler = new FeedCrawler();
         $this->feed = $this->feedRepository->findOrFail($this->feedId);
         $newItems = $this->getNewItems();
-        dump($newItems);
         if (!empty($newItems)) {
+            // save the new items in the local database
             $this->feedRepository->saveBulkItems($newItems);
+            // sent the new items to Feedly service async
+            AddNewItems::dispatchBasedOnConfig($newItems);
         }
         // save the new items in the local database
         NewItemsProcess::finishProcess($this->feedId);

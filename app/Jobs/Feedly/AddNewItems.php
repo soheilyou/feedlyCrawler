@@ -2,10 +2,9 @@
 
 namespace App\Jobs\Feedly;
 
-use App\Classes\Crawler\FeedCrawler;
+use App\Classes\Feedly\Exceptions\FeedlyException;
+use App\Classes\Feedly\Feedly;
 use App\Jobs\Traits\FeedlyDispatcher;
-use App\Models\Feed;
-use App\Repositories\Feed\FeedRepositoryInterface;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -20,27 +19,31 @@ class AddNewItems implements ShouldQueue
         SerializesModels,
         FeedlyDispatcher;
 
-    public int $feedId;
-    public ?Feed $feed;
-    public ?FeedRepositoryInterface $feedRepository;
-    public ?FeedCrawler $feedCrawler;
+    private array $items;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(int $feedId)
+    public function __construct(array $items)
     {
-        $this->feedId = $feedId;
+        $this->items = $items;
     }
 
     /**
      * Execute the job.
      *
      * @return void
+     * @throws FeedlyException
      */
-    public function handle()
+    public function handle(Feedly $feedly)
     {
+        /*
+         * if the request fails, a FeedlyException will be thrown
+         * then the job will be transferred to failed jobs (after reties)
+         * in database and any data won't be lost
+         */
+        $feedly->addNewItems($this->items);
     }
 }

@@ -119,12 +119,12 @@ class Feedly
     }
 
     /**
-     * @param array $data
+     * @param array $items
      * @return mixed
      * @throws FeedlyException
      */
-    public function insertOrUpdatePost(array $data)
+    public function addNewItems(array $items)
     {
-        return $this->post("services/horizon/post", $data);
+        return $this->postJson("services/crawler/add-new-items", $items);
     }
 }

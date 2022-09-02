@@ -24,7 +24,7 @@ class Crawl extends Command
     /**
      * @var FeedRepositoryInterface
      */
-    private $feedRepository;
+    private FeedRepositoryInterface $feedRepository;
 
     /**
      * Create a new command instance.
@@ -43,8 +43,10 @@ class Crawl extends Command
      */
     public function handle()
     {
+        // get the feeds that should be updated
         $feeds = $this->feedRepository->getUpdateNeededFeeds();
         foreach ($feeds as $feed) {
+            // run async processes for each feed
             ProcessNewItems::dispatchWithoutOverlap($feed->id);
         }
     }
