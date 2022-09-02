@@ -8,9 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Feed extends Model
 {
     use HasFactory;
+    protected $primaryKey = "id";
+    public $incrementing = false;
 
     protected $fillable = [
-        "feedly_id",
+        "id",
         "url",
         "rss_path",
         "update_period_in_minute",

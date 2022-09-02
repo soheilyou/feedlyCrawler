@@ -30,14 +30,14 @@ class FeedRepositoryTest extends TestCase
 
     public function testCreateFeed()
     {
-        $feedlyId = 1;
+        $id = 3;
         $url = 'TEST.com';
         $rssPath = 'RSs';
         $updatePeriodInMinute = 5;
         $lastBuildDate = now();
 
-        $feed = $this->feedRepository->upsert($feedlyId, $url, $rssPath, $updatePeriodInMinute, $lastBuildDate);
-        $this->assertEquals($feedlyId, $feed->feedly_id);
+        $feed = $this->feedRepository->upsert($id, $url, $rssPath, $updatePeriodInMinute, $lastBuildDate);
+        $this->assertEquals($id, $feed->id);
         $this->assertEquals(strtolower($url), $feed->url);
         $this->assertEquals(strtolower($rssPath), $feed->rss_path);
         $this->assertEquals($updatePeriodInMinute, $feed->update_period_in_minute);
@@ -47,16 +47,16 @@ class FeedRepositoryTest extends TestCase
 
     public function testCreateFeedCheckDatabase()
     {
-        $feedlyId = 1;
+        $id = 1;
         $url = 'TEST.com';
         $rssPath = 'RSs';
         $updatePeriodInMinute = 5;
         $lastBuildDate = now();
 
-        $feed = $this->feedRepository->upsert($feedlyId, $url, $rssPath, $updatePeriodInMinute, $lastBuildDate);
+        $feed = $this->feedRepository->upsert($id, $url, $rssPath, $updatePeriodInMinute, $lastBuildDate);
         // check database
         $this->assertDatabaseHas('feeds', [
-            'feedly_id' => $feedlyId,
+            'id' => $id,
             'url' => strtolower($url),
             'rss_path' => strtolower($rssPath),
             'update_period_in_minute' => $updatePeriodInMinute,

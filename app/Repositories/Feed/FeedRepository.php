@@ -16,7 +16,7 @@ class FeedRepository extends BaseRepository implements FeedRepositoryInterface
     }
 
     public function upsert(
-        int $feedlyId,
+        int $id,
         string $url,
         string $rssPath,
         int $updatePeriodInMinute,
@@ -25,16 +25,13 @@ class FeedRepository extends BaseRepository implements FeedRepositoryInterface
         if (is_string($lastBuildDate)) {
             $lastBuildDate = Carbon::parse($lastBuildDate);
         }
-        return Feed::updateOrCreate(
-            ["feedly_id" => $feedlyId],
-            [
-                "feedly_id" => $feedlyId,
-                "url" => $url,
-                "rss_path" => $rssPath,
-                "update_period_in_minute" => $updatePeriodInMinute,
-                "last_build_date" => $lastBuildDate,
-            ]
-        );
+        return Feed::create([
+            "id" => $id,
+            "url" => $url,
+            "rss_path" => $rssPath,
+            "update_period_in_minute" => $updatePeriodInMinute,
+            "last_build_date" => $lastBuildDate,
+        ]);
     }
 
     public function addItem(

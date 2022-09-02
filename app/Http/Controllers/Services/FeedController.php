@@ -25,7 +25,7 @@ class FeedController extends Controller
         //
         //        ]);
         $this->feedRepository->upsert(
-            $request->feedly_id,
+            $request->id,
             $request->url,
             $request->rss_path,
             $request->update_period_in_minute,

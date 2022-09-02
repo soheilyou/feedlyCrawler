@@ -14,7 +14,7 @@ class FeedFactory extends Factory
     public function definition()
     {
         return [
-            "feedly_id" => $this->faker->numberBetween(0, 10000000),
+            "id" => $this->faker->numberBetween(0, 10000000),
             "url" => $this->faker->url,
             "rss_path" => $this->faker->slug,
             "update_period_in_minute" => $this->faker->numberBetween(1, 1000),
