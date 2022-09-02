@@ -1,15 +1,12 @@
 <?php
 
-
 namespace App\Classes\Organize;
-
-
 
 use Illuminate\Support\Facades\Cache;
 
-class FeedlyProcess
+class NewItemsProcess
 {
-    const PROCESS_PREFIX_KEY = 'feedly_process_';
+    const PROCESS_PREFIX_KEY = "feedly_process_";
 
     public static function alreadyProcessing(int $feedId): bool
     {

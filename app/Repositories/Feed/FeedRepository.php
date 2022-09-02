@@ -15,25 +15,26 @@ class FeedRepository extends BaseRepository implements FeedRepositoryInterface
         parent::__construct($model);
     }
 
-
-    public function addFeed(
+    public function upsert(
         int $feedlyId,
         string $url,
         string $rssPath,
         int $updatePeriodInMinute,
         $lastBuildDate
-    ): Feed
-    {
+    ): Feed {
         if (is_string($lastBuildDate)) {
             $lastBuildDate = Carbon::parse($lastBuildDate);
         }
-        return $this->create([
-            "feedly_id" => $feedlyId,
-            "url" => $url,
-            "rss_path" => $rssPath,
-            "update_period_in_minute" => $updatePeriodInMinute,
-            "last_build_date" => $lastBuildDate
-        ]);
+        return Feed::updateOrCreate(
+            ["feedly_id" => $feedlyId],
+            [
+                "feedly_id" => $feedlyId,
+                "url" => $url,
+                "rss_path" => $rssPath,
+                "update_period_in_minute" => $updatePeriodInMinute,
+                "last_build_date" => $lastBuildDate,
+            ]
+        );
     }
 
     public function addItem(
@@ -43,8 +44,7 @@ class FeedRepository extends BaseRepository implements FeedRepositoryInterface
         string $image,
         string $description,
         $pubDate
-    ): Item
-    {
+    ): Item {
         return Item::create([
             "feed_id" => $feedId,
             "title" => $title,
@@ -55,13 +55,27 @@ class FeedRepository extends BaseRepository implements FeedRepositoryInterface
         ]);
     }
 
+    public function getLastItem(int $feedId)
+    {
+        return Item::where("feed_id", $feedId)
+            ->orderBy("pub_date", "DESC")
+            ->first();
+    }
+
     public function getUpdateNeededFeeds()
     {
-        return Feed::whereRaw("(last_crawled_at < DATE_ADD(last_build_date, INTERVAL update_period_in_minute MINUTE) AND DATE_ADD(last_build_date, INTERVAL update_period_in_minute MINUTE) < NOW() )")
+        return Feed::whereRaw(
+            "(last_crawled_at < DATE_ADD(last_build_date, INTERVAL update_period_in_minute MINUTE) AND DATE_ADD(last_build_date, INTERVAL update_period_in_minute MINUTE) < NOW() )"
+        )
             ->orWhereRaw("last_crawled_at < last_build_date")
-            ->orWhere('last_crawled_at', null)
-            ->orWhere('update_period_in_minute', null)
-            ->orWhere('last_build_date', null)
+            ->orWhere("last_crawled_at", null)
+            ->orWhere("update_period_in_minute", null)
+            ->orWhere("last_build_date", null)
             ->get();
+    }
+
+    public function saveBulkItems(array $items)
+    {
+        Item::insert($items);
     }
 }

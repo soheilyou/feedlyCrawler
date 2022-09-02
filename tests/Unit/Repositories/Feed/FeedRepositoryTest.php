@@ -36,7 +36,7 @@ class FeedRepositoryTest extends TestCase
         $updatePeriodInMinute = 5;
         $lastBuildDate = now();
 
-        $feed = $this->feedRepository->addFeed($feedlyId, $url, $rssPath, $updatePeriodInMinute, $lastBuildDate);
+        $feed = $this->feedRepository->upsert($feedlyId, $url, $rssPath, $updatePeriodInMinute, $lastBuildDate);
         $this->assertEquals($feedlyId, $feed->feedly_id);
         $this->assertEquals(strtolower($url), $feed->url);
         $this->assertEquals(strtolower($rssPath), $feed->rss_path);
@@ -53,7 +53,7 @@ class FeedRepositoryTest extends TestCase
         $updatePeriodInMinute = 5;
         $lastBuildDate = now();
 
-        $feed = $this->feedRepository->addFeed($feedlyId, $url, $rssPath, $updatePeriodInMinute, $lastBuildDate);
+        $feed = $this->feedRepository->upsert($feedlyId, $url, $rssPath, $updatePeriodInMinute, $lastBuildDate);
         // check database
         $this->assertDatabaseHas('feeds', [
             'feedly_id' => $feedlyId,

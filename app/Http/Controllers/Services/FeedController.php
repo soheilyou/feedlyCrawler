@@ -20,16 +20,16 @@ class FeedController extends Controller
 
     public function store(Request $request)
     {
-         // TODO :: validate
-//        $request->validate([
-//
-//        ]);
-        $this->feedRepository->addFeed(
+        // TODO :: validate
+        //        $request->validate([
+        //
+        //        ]);
+        $this->feedRepository->upsert(
             $request->feedly_id,
             $request->url,
             $request->rss_path,
             $request->update_period_in_minute,
-            $request->last_build_date,
+            $request->last_build_date
         );
     }
 }
