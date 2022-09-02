@@ -14,8 +14,7 @@ trait ProcessNewItemsDispatcher
         /**
          * if for this feed another job already is processing, we don't dispatch a new one
          */
-        //        if (!NewItemsProcess::alreadyProcessing($feedId)) {
-        if (true) {
+        if (!NewItemsProcess::alreadyProcessing($feedId)) {
             self::dispatch(...$args)->onQueue(self::$processNewItems);
         }
     }
