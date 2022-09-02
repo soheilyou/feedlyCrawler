@@ -16,7 +16,7 @@ class CreateFeedsTable extends Migration
         Schema::create("feeds", function (Blueprint $table) {
             $table->id();
             $table->bigInteger("feedly_id")->unsigned()->unique(); // feed's id in the main service
-            $table->string("url")->unique();
+            $table->string("url");
             $table->string("rss_path");
             $table->integer('update_period_in_minute')->nullable();
             $table->timestamp('last_build_date')->nullable();
