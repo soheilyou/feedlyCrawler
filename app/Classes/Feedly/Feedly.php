@@ -125,6 +125,6 @@ class Feedly
      */
     public function addNewItems(array $items)
     {
-        return $this->postJson("services/crawler/add-new-items", $items);
+        return $this->postJson("/api/services/crawler/add-new-items", $items);
     }
 }
