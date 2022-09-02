@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Services\FeedController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,5 +24,9 @@ Route::get('/test', function (Request $request) {
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-// TODO :: service middleware
-Route::post('/feed', [\App\Http\Controllers\Services\FeedController::class, 'store']);
+
+
+Route::middleware('internalServiceAuth')->prefix('services')->group(function () {
+    Route::post('/feedly/add-new-feed', [FeedController::class, 'addFeed']);
+});
+

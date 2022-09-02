@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Services;
 use App\Http\Controllers\Controller;
 use App\Repositories\Feed\FeedRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class FeedController extends Controller
 {
@@ -18,18 +19,21 @@ class FeedController extends Controller
         $this->feedRepository = $feedRepository;
     }
 
-    public function store(Request $request)
+    public function addFeed(Request $request)
     {
-        // TODO :: validate
-        //        $request->validate([
-        //
-        //        ]);
-        $this->feedRepository->upsert(
-            $request->id,
-            $request->url,
-            $request->rss_path,
-            $request->update_period_in_minute,
-            $request->last_build_date
-        );
+        $request->validate([
+            "feed" => "required|array",
+            "feed.id" => "required|numeric",
+            "feed.url" => "required",
+        ]);
+
+        if (!$this->feedRepository->find($request->id)) {
+            $this->feedRepository->upsert(
+                $request->input("feed.id"),
+                $request->input("feed.url"),
+                $request->input("feed.rss_path", "rss")
+            );
+        }
+        return response()->json(["success" => true]);
     }
 }

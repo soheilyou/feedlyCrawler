@@ -19,7 +19,7 @@ class CreateFeedsTable extends Migration
                 ->unsigned()
                 ->unique();
             $table->string("url");
-            $table->string("rss_path");
+            $table->string("rss_path")->nullable();
             $table->integer("update_period_in_minute")->nullable();
             $table->timestamp("last_build_date")->nullable();
             $table->timestamp("last_crawled_at")->nullable();

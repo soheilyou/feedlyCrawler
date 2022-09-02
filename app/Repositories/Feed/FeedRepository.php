@@ -18,9 +18,9 @@ class FeedRepository extends BaseRepository implements FeedRepositoryInterface
     public function upsert(
         int $id,
         string $url,
-        string $rssPath,
-        int $updatePeriodInMinute,
-        $lastBuildDate
+        ?string $rssPath = null,
+        ?int $updatePeriodInMinute = null,
+        $lastBuildDate = null
     ): Feed {
         if (is_string($lastBuildDate)) {
             $lastBuildDate = Carbon::parse($lastBuildDate);
