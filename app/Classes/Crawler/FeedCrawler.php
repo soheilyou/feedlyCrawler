@@ -90,7 +90,7 @@ class FeedCrawler
 
     public function getResponse(): ?Collection
     {
-        return $this->items;
+        return $this->items->reverse();
     }
 
     public function format(): FeedCrawler

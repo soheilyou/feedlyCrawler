@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Classes\Crawler\FeedCrawler;
 use App\Classes\Organize\NewItemsProcess;
 use App\Jobs\Feedly\AddNewItems;
+use App\Jobs\Traits\AutoRetry;
 use App\Jobs\Traits\ProcessNewItemsDispatcher;
 use App\Models\Feed;
 use App\Repositories\Feed\FeedRepositoryInterface;
@@ -22,7 +23,8 @@ class ProcessNewItems implements ShouldQueue
         InteractsWithQueue,
         Queueable,
         SerializesModels,
-        ProcessNewItemsDispatcher;
+        ProcessNewItemsDispatcher,
+        AutoRetry;
 
     public int $feedId;
     public ?Feed $feed;
@@ -37,6 +39,7 @@ class ProcessNewItems implements ShouldQueue
     public function __construct(int $feedId)
     {
         $this->feedId = $feedId;
+        $this->setJobUniqueKey($feedId);
     }
 
     /**
