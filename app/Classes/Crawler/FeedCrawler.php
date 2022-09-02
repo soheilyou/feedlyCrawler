@@ -103,8 +103,7 @@ class FeedCrawler
             )->toDateTimeString();
             $filtered["title"] = $item["title"];
             $filtered["link"] = $item["link"];
-            //            $filtered['description'] = $item['description']; // TODO
-            $filtered["description"] = "s";
+            $filtered["description"] = $item["description"];
             $filtered["created_at"] = now()->toDateTimeString();
             $filtered["updated_at"] = now()->toDateTimeString();
             return $filtered;

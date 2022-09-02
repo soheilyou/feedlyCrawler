@@ -73,6 +73,6 @@ class FeedRepository extends BaseRepository implements FeedRepositoryInterface
 
     public function saveBulkItems(array $items)
     {
-        Item::insert($items);
+        return Item::insert($items);
     }
 }
